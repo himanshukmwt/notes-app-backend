@@ -1,6 +1,6 @@
 import Note from "../models/notes.js";
 
-export const createNote = async (req, res) => {
+export const createNote = async (req, res,next) => {
     try {
         const { title, content, category } = req.body;
 
@@ -22,26 +22,22 @@ export const createNote = async (req, res) => {
         });
 
     } catch (err) {
-        return res.status(500).json({
-            message: "Something went wrong"
-        });
+        next(err);
     }
 };
 
-export const getNotes = async (req, res) => {
+export const getNotes = async (req, res, next) => {
     try {
         const notes = await Note.find().sort({ createdAt: -1 });
 
         return res.status(200).json(notes);
 
     } catch (err) {
-        return res.status(500).json({
-            message: "Something went wrong"
-        });
+        next(err);
     }
 };
 
-export const getNote = async (req, res) => {
+export const getNote = async (req, res, next) => {
     try {
         const note = await Note.findById(req.params.id);
 
@@ -54,13 +50,11 @@ export const getNote = async (req, res) => {
         return res.status(200).json(note);
 
     } catch (err) {
-        return res.status(500).json({
-            message: "Something went wrong"
-        });
+        next(err);
     }
 };
 
-export const updateNote = async (req, res) => {
+export const updateNote = async (req, res, next) => {
     try {
         const { title, content, category } = req.body;
 
@@ -72,7 +66,7 @@ export const updateNote = async (req, res) => {
                 category
             },
             {
-                new: true,
+                returnDocument: "after",
                 runValidators: true
             }
         );
@@ -89,20 +83,18 @@ export const updateNote = async (req, res) => {
         });
 
     } catch (err) {
-        return res.status(500).json({
-            message: "Something went wrong"
-        });
+        next(err);
     }
 };
 
 
-export const patchNote = async (req, res) => {
+export const patchNote = async (req, res, next) => {
     try {
         const note = await Note.findByIdAndUpdate(
             req.params.id,
             { $set: req.body },
             {
-                new: true,
+                returnDocument: "after",
                 runValidators: true
             }
         );
@@ -119,13 +111,11 @@ export const patchNote = async (req, res) => {
         });
 
     } catch (err) {
-        return res.status(500).json({
-            message: "Something went wrong"
-        });
+        next(err);
     }
 };
 
-export const deleteNote = async (req, res) => {
+export const deleteNote = async (req, res, next) => {
     try {
         const note = await Note.findByIdAndDelete(req.params.id);
 
@@ -140,8 +130,6 @@ export const deleteNote = async (req, res) => {
         });
 
     } catch (err) {
-        return res.status(500).json({
-            message: "Something went wrong"
-        });
+        next(err);
     }
 };
