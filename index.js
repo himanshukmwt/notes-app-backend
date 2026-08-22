@@ -3,7 +3,7 @@ import mongoose from "mongoose";
 import dotenv from "dotenv";
 import cors from "cors";
 
-// import noteRoutes from "./routes/noteRoutes.js";
+import noteRoutes from "./routes/noteRoutes.js";
 
 dotenv.config();
 
@@ -18,7 +18,7 @@ app.get("/", (req, res) => {
     });
 });
 
-// app.use("/api/notes", noteRoutes);
+app.use("/api/notes", noteRoutes);
 
 mongoose
     .connect(process.env.MONGO_URL)

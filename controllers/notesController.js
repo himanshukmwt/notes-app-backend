@@ -60,6 +60,41 @@ export const getNote = async (req, res) => {
     }
 };
 
+export const updateNote = async (req, res) => {
+    try {
+        const { title, content, category } = req.body;
+
+        const note = await Note.findByIdAndUpdate(
+            req.params.id,
+            {
+                title,
+                content,
+                category
+            },
+            {
+                new: true,
+                runValidators: true
+            }
+        );
+
+        if (!note) {
+            return res.status(404).json({
+                message: "Note not found"
+            });
+        }
+
+        return res.status(200).json({
+            message: "Note updated successfully",
+            note
+        });
+
+    } catch (err) {
+        return res.status(500).json({
+            message: "Something went wrong"
+        });
+    }
+};
+
 
 export const patchNote = async (req, res) => {
     try {
