@@ -59,3 +59,54 @@ export const getNote = async (req, res) => {
         });
     }
 };
+
+
+export const patchNote = async (req, res) => {
+    try {
+        const note = await Note.findByIdAndUpdate(
+            req.params.id,
+            { $set: req.body },
+            {
+                new: true,
+                runValidators: true
+            }
+        );
+
+        if (!note) {
+            return res.status(404).json({
+                message: "Note not found"
+            });
+        }
+
+        return res.status(200).json({
+            message: "Note updated successfully",
+            note
+        });
+
+    } catch (err) {
+        return res.status(500).json({
+            message: "Something went wrong"
+        });
+    }
+};
+
+export const deleteNote = async (req, res) => {
+    try {
+        const note = await Note.findByIdAndDelete(req.params.id);
+
+        if (!note) {
+            return res.status(404).json({
+                message: "Note not found"
+            });
+        }
+
+        return res.status(200).json({
+            message: "Note deleted successfully"
+        });
+
+    } catch (err) {
+        return res.status(500).json({
+            message: "Something went wrong"
+        });
+    }
+};
