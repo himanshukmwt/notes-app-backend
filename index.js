@@ -14,16 +14,14 @@ dotenv.config();
 const app = express();
 
 app.use(express.json());
-app.use(cors());
+app.use(cors(
+    {origin: "http://localhost:5173"}
+));
+app.use(logs);
 
-app.get("/", (req, res) => {
-    res.json({
-        message: "Notes API is running"
-    });
-});
 
 app.use("/api/notes", noteRoutes);
-app.use(logs);
+
 app.use(errorHandler);
 
 mongoose
